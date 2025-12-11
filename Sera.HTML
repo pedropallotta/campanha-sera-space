@@ -1,0 +1,660 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Ajude o Space Orbit a ir ao Espaço</title>
+
+    <!-- Tailwind CDN (apenas para protótipo) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Fonts & Icons -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Inter:wght@400;600;700&display=swap"
+        rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg: #050505;
+            --card: #0E1117;
+            --muted: #9CA3AF;
+            --accent-blue: #3B82F6;
+            --accent-purple: #A855F7;
+            --accent-gold: #FBBF24;
+            --glass: rgba(255, 255, 255, 0.04);
+            --border: rgba(255, 255, 255, 0.08);
+        }
+
+        /* Base */
+        html,
+        body {
+            height: 100%
+        }
+
+        body {
+            background: var(--bg);
+            color: #F3F4F6;
+            font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+            padding: 36px 20px;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .font-tech {
+            font-family: Rajdhani, sans-serif;
+            text-transform: uppercase;
+        }
+
+        /* Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: block;
+            gap: 28px
+        }
+
+        /* Header */
+        .page-title {
+            font-weight: 700;
+            line-height: 1;
+            letter-spacing: -0.02em
+        }
+
+        .lead {
+            color: var(--muted);
+            max-width: 900px;
+            margin: 12px auto 0;
+            font-size: 1.05rem
+        }
+
+        /* Card */
+        .so-card {
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.015), rgba(0, 0, 0, 0.02)), var(--card);
+            border-radius: 18px;
+            border: 1px solid var(--border);
+            padding: 28px;
+            position: relative;
+            overflow: hidden;
+            transition: transform .22s ease, box-shadow .22s ease, border-color .22s ease;
+        }
+
+        .so-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 20px 60px rgba(8, 14, 30, 0.6);
+            border-color: rgba(59, 130, 246, 0.18);
+        }
+
+        /* scan overlay */
+        .scan {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            background: linear-gradient(180deg, transparent, rgba(59, 130, 246, 0.04), transparent);
+            mix-blend-mode: screen;
+            animation: scanY 8s linear infinite;
+        }
+
+        @keyframes scanY {
+            0% {
+                transform: translateY(-100%)
+            }
+
+            100% {
+                transform: translateY(100%)
+            }
+        }
+
+        /* layout mission row */
+        .mission-row {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+            align-items: flex-start
+        }
+
+        .badge {
+            width: 140px;
+            flex: 0 0 140px;
+            transition: transform .18s ease
+        }
+
+        .so-card:hover .badge {
+            transform: scale(1.05) rotate(0.8deg)
+        }
+
+        .mission-body {
+            flex: 1;
+            min-width: 0
+        }
+
+        .mission-title {
+            font-size: 1.6rem
+        }
+
+        .mission-desc {
+            color: var(--muted);
+            font-size: 1rem;
+            margin-top: 6px
+        }
+
+        .pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: var(--glass);
+            border-radius: 10px;
+            padding: 8px 12px;
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            font-size: .95rem;
+            color: #E5E7EB
+        }
+
+        .pill.blue {
+            background: rgba(59, 130, 246, 0.08);
+            border-color: rgba(59, 130, 246, 0.18);
+            color: #CFE8FF
+        }
+
+        /* grid for desktop */
+        @media(min-width:980px) {
+            .mission-row {
+                flex-direction: row;
+                align-items: flex-start;
+                gap: 36px
+            }
+
+            .badge {
+                width: 160px;
+                flex: 0 0 160px
+            }
+        }
+
+        /* Card especial para check-in diário */
+        .so-card.theme-special {
+            background: linear-gradient(180deg, rgba(251, 191, 36, 0.08), rgba(0, 0, 0, 0.02)), var(--card);
+            border-color: rgba(251, 191, 36, 0.25);
+        }
+
+        .so-card.theme-special:hover {
+            transform: none;
+            box-shadow: none;
+            border-color: rgba(251, 191, 36, 0.35);
+        }
+
+        .so-card.theme-special .mission-title {
+            color: var(--accent-gold);
+        }
+
+        /* Card menor para seções especiais */
+        .so-card-small {
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.015), rgba(0, 0, 0, 0.02)), var(--card);
+            border-radius: 16px;
+            border: 1px solid var(--border);
+            padding: 24px 32px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .so-card-small.gold {
+            border-color: rgba(251, 191, 36, 0.25);
+            background: linear-gradient(180deg, rgba(251, 191, 36, 0.06), rgba(0, 0, 0, 0.02)), var(--card);
+        }
+
+        /* CTA */
+        .cta {
+            display: inline-block;
+            background: linear-gradient(90deg, var(--accent-blue), #2563eb);
+            padding: 14px 26px;
+            border-radius: 12px;
+            font-weight: 700;
+            text-decoration: none;
+            box-shadow: 0 12px 36px rgba(37, 99, 235, 0.18)
+        }
+
+        /* header/badges spacing */
+        header {
+            margin-bottom: 6px;
+            text-align: center
+        }
+
+        .section-title {
+            font-size: 1.25rem;
+            color: var(--muted);
+            font-weight: 600;
+            margin-bottom: 8px
+        }
+
+        .small {
+            font-size: .9rem;
+            color: var(--muted)
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container max-w-[1200px] mx-auto">
+
+        <!-- HEADER -->
+        <header class="mb-6">
+            <h1 class="page-title text-5xl md:text-6xl font-tech font-bold">
+                AJUDE O <span style="color:var(--accent-blue)">SPACE ORBIT</span><br> A IR AO ESPAÇO
+            </h1>
+            <p class="lead">
+                Complete as 19 insígnias. Cada ação gera Space Dust e fortalece a presença da Space Orbit na campanha
+                de lançamento. Quanto mais badges você conquistar, mais valioso será seu voto!
+            </p>
+        </header>
+
+        <!-- START / MISSION CONTROL -->
+        <section class="mb-12 text-center">
+            <div class="so-card-small">
+                <h2 class="font-tech text-2xl md:text-3xl font-bold">COMECE SUA JORNADA</h2>
+                <p class="mission-desc mt-3">
+                    Entre apenas pelo link do Space Orbit. Assim toda a Space Dust que você gerar será corretamente
+                    atribuída à Space Orbit.
+                </p>
+                <div class="mt-6">
+                    <a class="cta" href="https://t.me/sera_mission_control_bot/app?startapp=V66953M1" target="_blank"
+                        rel="noopener">ENTRAR NO MISSION CONTROL</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- MISSIONS LIST -->
+        <div class="so-list space-y-8">
+
+            <!-- 1 PIONEIRO -->
+            <article class="so-card theme-blue relative">
+                <div class="scan" aria-hidden="true"></div>
+                <div class="mission-row">
+                    <img class="badge" src="https://app.sera.space/badges/account_created.png" alt="Pioneiro badge">
+                    <div class="mission-body">
+                        <h3 class="mission-title font-tech font-bold">PIONEIRO</h3>
+                        <p class="mission-desc">
+                            Acesso inicial ao app. Abra o app e conclua seu cadastro para validar sua conta e começar a
+                            acumular a Space Dust.
+                        </p>
+                        <div class="mt-4 flex flex-wrap gap-3">
+                            <span class="pill"><i class="fas fa-sign-in-alt"></i> Acesse o app</span>
+                            <span class="pill"><i class="fas fa-user-check"></i> Complete seu cadastro</span>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <!-- 2 REAÇÃO EM CADEIA -->
+            <article class="so-card theme-blue relative">
+                <div class="scan" aria-hidden="true"></div>
+                <div class="mission-row">
+                    <img class="badge" src="https://app.sera.space/badges/referred_user.png" alt="Reação em Cadeia">
+                    <div class="mission-body">
+                        <h3 class="mission-title font-tech font-bold">REAÇÃO EM CADEIA</h3>
+                        <p class="mission-desc">
+                            Entre pelo link de convite do Space Orbit. Esse fluxo garante bônus iniciais e vincula suas
+                            atividades à Space Orbit.
+                        </p>
+                        <div class="mt-4">
+                            <span class="pill blue"><i class="fas fa-check-circle"></i> Entrou pelo link do Space Orbit?
+                                Missão concluída</span>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <!-- 3 VERIFICAR E CONECTAR -->
+            <article class="so-card theme-blue relative">
+                <div class="scan" aria-hidden="true"></div>
+                <div class="mission-row">
+                    <img class="badge" src="https://app.sera.space/badges/verify_and_connect.png"
+                        alt="Verificar e Conectar">
+                    <div class="mission-body">
+                        <h3 class="mission-title font-tech font-bold">VERIFICAR E CONECTAR</h3>
+                        <p class="mission-desc">
+                            Conecte suas redes sociais no perfil. Publicações rastreadas pelo SERA convertem em Space
+                            Dust automaticamente.
+                        </p>
+                        <div class="mt-4 flex flex-wrap gap-3">
+                            <span class="pill"><i class="fas fa-plug"></i> Vá em Configurações do perfil</span>
+                            <span class="pill"><i class="fas fa-link"></i> Conecte X, Instagram, TikTok</span>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <!-- 4 COMPARTILHE SEU ID -->
+            <article class="so-card theme-blue relative">
+                <div class="scan" aria-hidden="true"></div>
+                <div class="mission-row">
+                    <img class="badge" src="https://app.sera.space/badges/badge_card_created.png"
+                        alt="Compartilhe seu ID">
+                    <div class="mission-body">
+                        <h3 class="mission-title font-tech font-bold">COMPARTILHE SEU ID SERA</h3>
+                        <p class="mission-desc">
+                            Gere e publique seu cartão de astronauta. Postar o cartão aumenta visibilidade e gera Space
+                            Dust rastreável.
+                        </p>
+                        <div class="mt-4 flex flex-wrap gap-3">
+                            <span class="pill"><i class="fas fa-share-square"></i> Gere a imagem no app</span>
+                            <span class="pill blue"><i class="fas fa-tag"></i> Use #SERASpace</span>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <!-- 5 TON EXPLORER (fluxo corrigido) -->
+            <article class="so-card theme-blue relative">
+                <div class="scan" aria-hidden="true"></div>
+                <div class="mission-row">
+                    <img class="badge" src="https://app.sera.space/badges/connect_ton_wallet.png" alt="TON Explorer">
+                    <div class="mission-body">
+                        <h3 class="mission-title font-tech font-bold">TON EXPLORER</h3>
+                        <p class="mission-desc">
+                            Crie sua carteira TON no Telegram primeiro. Depois retorne ao app para conectar a
+                            carteira de forma segura.
+                        </p>
+                        <div class="mt-4 flex flex-wrap gap-3">
+                            <span class="pill"><i class="fas fa-wallet"></i> Abra a TON Wallet no Telegram</span>
+                            <span class="pill"><i class="fas fa-key"></i> Finalize a criação da carteira</span>
+                            <span class="pill blue"><i class="fas fa-link"></i> Volte ao app e conecte a wallet</span>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <!-- 6 ANUNCIE SUA CANDIDATURA -->
+            <article class="so-card theme-blue relative">
+                <div class="scan" aria-hidden="true"></div>
+                <div class="mission-row">
+                    <img class="badge" src="https://app.sera.space/badges/first_post.png" alt="Anuncie sua candidatura">
+                    <div class="mission-body">
+                        <h3 class="mission-title font-tech font-bold">ANUNCIE SUA CANDIDATURA</h3>
+                        <p class="mission-desc">
+                            Publique o primeiro post de campanha nas suas redes conectadas com a hashtag oficial para
+                            receber Space Dust adicional.
+                        </p>
+                        <div class="mt-4 flex flex-wrap gap-3">
+                            <span class="pill"><i class="fas fa-bullhorn"></i> Faça o primeiro post</span>
+                            <span class="pill blue"><i class="fas fa-tag"></i> Use #SERASpace</span>
+                            <span class="pill"><i class="fas fa-star"></i> Bônus de engajamento aplicado</span>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <!-- 7 CENTRAL DE TRANSMISSÃO -->
+            <article class="so-card theme-blue relative">
+                <div class="scan" aria-hidden="true"></div>
+                <div class="mission-row">
+                    <img class="badge" src="https://app.sera.space/badges/five_posts.png" alt="Central de Transmissão">
+                    <div class="mission-body">
+                        <h3 class="mission-title font-tech font-bold">CENTRAL DE TRANSMISSÃO</h3>
+                        <p class="mission-desc">
+                            Publique de forma consistente. Acumule 5 posts nas redes conectadas para estabilizar sua
+                            produção de Space Dust.
+                        </p>
+                        <div class="mt-4 flex flex-wrap gap-3">
+                            <span class="pill"><i class="fas fa-layer-group"></i> Alcance 5 posts</span>
+                            <span class="pill blue"><i class="fas fa-redo"></i> Continue usando #SERASpace</span>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <!-- 8 UPLINK CÓSMICO -->
+            <article class="so-card theme-blue relative">
+                <div class="scan" aria-hidden="true"></div>
+                <div class="mission-row">
+                    <img class="badge" src="https://app.sera.space/badges/ten_posts.png" alt="Uplink Cósmico">
+                    <div class="mission-body">
+                        <h3 class="mission-title font-tech font-bold">UPLINK CÓSMICO</h3>
+                        <p class="mission-desc">
+                            Mantenha frequência. Acumule 10 posts totais nas redes conectadas para aumentar sua
+                            influência rastreável.
+                        </p>
+                        <div class="mt-4 flex flex-wrap gap-3">
+                            <span class="pill"><i class="fas fa-satellite-dish"></i> Alcance 10 posts</span>
+                            <span class="pill"><i class="fas fa-info-circle"></i> Em qualquer rede conectada</span>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <!-- 9 TRANSMISSOR ESTELAR -->
+            <article class="so-card theme-blue relative">
+                <div class="scan" aria-hidden="true"></div>
+                <div class="mission-row">
+                    <img class="badge" src="https://app.sera.space/badges/twenty_posts.png" alt="Transmissor Estelar">
+                    <div class="mission-body">
+                        <h3 class="mission-title font-tech font-bold">TRANSMISSOR ESTELAR</h3>
+                        <p class="mission-desc">
+                            Expanda sua voz. Acumule 20 posts totais para receber um impulso significativo de Space
+                            Dust.
+                        </p>
+                        <div class="mt-4 flex flex-wrap gap-3">
+                            <span class="pill"><i class="fas fa-broadcast-tower"></i> Alcance 20 posts</span>
+                            <span class="pill blue"><i class="fas fa-check-double"></i> Use #SERASpace sempre</span>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <!-- 10 ENCONTRE SEU COPILOTO -->
+            <article class="so-card theme-blue relative">
+                <div class="scan" aria-hidden="true"></div>
+                <div class="mission-row">
+                    <img class="badge" src="https://app.sera.space/badges/referral_first_user.png"
+                        alt="Encontre seu copiloto">
+                    <div class="mission-body">
+                        <h3 class="mission-title font-tech font-bold">ENCONTRE SEU COPILOTO</h3>
+                        <p class="mission-desc">
+                            Comece a recrutar. Convide amigos via link para formar sua equipe e garantir Space Dust por
+                            indicação.
+                        </p>
+                        <div class="mt-4 flex flex-wrap gap-3">
+                            <span class="pill"><i class="fas fa-copy"></i> Copie seu link em \"Convidar Amigos\"</span>
+                            <span class="pill"><i class="fas fa-user-plus"></i> Traga pelo menos 1 pessoa</span>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <!-- 11 MONTE SUA TRIPULAÇÃO -->
+            <article class="so-card theme-blue relative">
+                <div class="scan" aria-hidden="true"></div>
+                <div class="mission-row">
+                    <img class="badge" src="https://app.sera.space/badges/referral_five_users.png"
+                        alt="Monte sua tripulação">
+                    <div class="mission-body">
+                        <h3 class="mission-title font-tech font-bold">MONTE SUA TRIPULAÇÃO</h3>
+                        <p class="mission-desc">
+                            Consolide seu núcleo. Convide 5 pessoas ativas para formar uma base de apoio que gere Space
+                            Dust constante.
+                        </p>
+                        <div class="mt-4 flex flex-wrap gap-3">
+                            <span class="pill"><i class="fas fa-users"></i> Alcance 5 convites confirmados</span>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <!-- 12 EXPANDA SUA FROTA -->
+            <article class="so-card theme-blue relative">
+                <div class="scan" aria-hidden="true"></div>
+                <div class="mission-row">
+                    <img class="badge" src="https://app.sera.space/badges/referral_ten_users.png"
+                        alt="Expanda sua frota">
+                    <div class="mission-body">
+                        <h3 class="mission-title font-tech font-bold">EXPANDA SUA FROTA</h3>
+                        <p class="mission-desc">
+                            Aumente alcance. Chegue a 10 convidados ativos para transformar sua influência em Space Dust
+                            significativa.
+                        </p>
+                        <div class="mt-4 flex flex-wrap gap-3">
+                            <span class="pill"><i class="fas fa-rocket"></i> Alcance 10 convites confirmados</span>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <!-- 13 CRIE UMA ALIANÇA -->
+            <article class="so-card theme-blue relative">
+                <div class="scan" aria-hidden="true"></div>
+                <div class="mission-row">
+                    <img class="badge" src="https://app.sera.space/badges/referral_twenty_users.png"
+                        alt="Crie uma aliança">
+                    <div class="mission-body">
+                        <h3 class="mission-title font-tech font-bold">CRIE UMA ALIANÇA</h3>
+                        <p class="mission-desc">
+                            Liderança em escala. Convide 20 pessoas e forme uma comunidade robusta que contribua
+                            continuamente com Space Dust.
+                        </p>
+                        <div class="mt-4 flex flex-wrap gap-3">
+                            <span class="pill"><i class="fas fa-flag"></i> Alcance 20 convites confirmados</span>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <!-- 14 TORNE-SE GALÁCTICO -->
+            <article class="so-card theme-blue relative">
+                <div class="scan" aria-hidden="true"></div>
+                <div class="mission-row">
+                    <img class="badge" src="https://app.sera.space/badges/referral_fifty_users.png"
+                        alt="Torne-se galáctico">
+                    <div class="mission-body">
+                        <h3 class="mission-title font-tech font-bold">TORNE-SE GALÁCTICO</h3>
+                        <p class="mission-desc">
+                            Influência massiva. Ao alcançar 50 convidados ativos, você passa a gerar grandes quantidades
+                            de Space Dust para a Space Orbit.
+                        </p>
+                        <div class="mt-4 flex flex-wrap gap-3">
+                            <span class="pill"><i class="fas fa-globe"></i> Alcance 50 convites confirmados</span>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <!-- 15 SUPERNOVA -->
+            <article class="so-card theme-blue relative">
+                <div class="scan" aria-hidden="true"></div>
+                <div class="mission-row">
+                    <img class="badge" src="https://app.sera.space/badges/referral_hundred_users.png" alt="Supernova">
+                    <div class="mission-body">
+                        <h3 class="mission-title font-tech font-bold">SUPERNOVA</h3>
+                        <p class="mission-desc">
+                            Lenda do recrutamento. Ao atingir 100 convites confirmados, você recebe recompensas e passa
+                            a ser referência na campanha.
+                        </p>
+                        <div class="mt-4 flex flex-wrap gap-3">
+                            <span class="pill"><i class="fas fa-meteor"></i> Alcance 100 convites confirmados</span>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <!-- 16 SINAL DETECTADO -->
+            <article class="so-card theme-blue relative">
+                <div class="scan" aria-hidden="true"></div>
+                <div class="mission-row">
+                    <img class="badge" src="https://app.sera.space/badges/hundread_total_views.png"
+                        alt="Sinal Detectado">
+                    <div class="mission-body">
+                        <h3 class="mission-title font-tech font-bold">SINAL DETECTADO</h3>
+                        <p class="mission-desc">
+                            Primeira audiência. Alcance 100 visualizações totais nas postagens conectadas para validar
+                            seu alcance inicial.
+                        </p>
+                        <div class="mt-4 flex flex-wrap gap-3">
+                            <span class="pill"><i class="fas fa-eye"></i> Alcance 100 views</span>
+                            <span class="pill blue"><i class="fas fa-bolt"></i> 1 View = Space Dust</span>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <!-- 17 ECO DE FREQUÊNCIA -->
+            <article class="so-card theme-blue relative">
+                <div class="scan" aria-hidden="true"></div>
+                <div class="mission-row">
+                    <img class="badge" src="https://app.sera.space/badges/three_hundread_total_views.png"
+                        alt="Eco de Frequência">
+                    <div class="mission-body">
+                        <h3 class="mission-title font-tech font-bold">ECO DE FREQUÊNCIA</h3>
+                        <p class="mission-desc">
+                            Amplifique o sinal. Alcance 300 visualizações totais para aumentar sua taxa de geração de
+                            Space Dust.
+                        </p>
+                        <div class="mt-4 flex flex-wrap gap-3">
+                            <span class="pill"><i class="fas fa-wave-square"></i> Alcance 300 views</span>
+                            <span class="pill blue"><i class="fas fa-tag"></i> Continue usando #SERASpace</span>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <!-- 18 INFLUÊNCIA ESTELAR -->
+            <article class="so-card theme-blue relative">
+                <div class="scan" aria-hidden="true"></div>
+                <div class="mission-row">
+                    <img class="badge" src="https://app.sera.space/badges/five_hundread_total_views.png"
+                        alt="Influência Estelar">
+                    <div class="mission-body">
+                        <h3 class="mission-title font-tech font-bold">INFLUÊNCIA ESTELAR</h3>
+                        <p class="mission-desc">
+                            Alcançe orbital. Chegue a 500 visualizações totais para posicionar sua conta entre as vozes
+                            mais influentes.
+                        </p>
+                        <div class="mt-4 flex flex-wrap gap-3">
+                            <span class="pill"><i class="fas fa-atom"></i> Alcance 500 views</span>
+                            <span class="pill blue"><i class="fas fa-tag"></i> Mantenha a hashtag</span>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <!-- 19 FAROL GALÁCTICO -->
+            <article class="so-card theme-blue relative">
+                <div class="scan" aria-hidden="true"></div>
+                <div class="mission-row">
+                    <img class="badge" src="https://app.sera.space/badges/one_thousand_total_views.png"
+                        alt="Farol Galáctico">
+                    <div class="mission-body">
+                        <h3 class="mission-title font-tech font-bold">FAROL GALÁCTICO</h3>
+                        <p class="mission-desc">
+                            Viralização completa. Alcance 1.000 visualizações totais e obtenha grandes bônus de Space
+                            Dust e recompensas extras.
+                        </p>
+                        <div class="mt-4 flex flex-wrap gap-3">
+                            <span class="pill"><i class="fas fa-lightbulb"></i> Alcance 1.000 views</span>
+                            <span class="pill blue"><i class="fas fa-gift"></i> Bônus: Space Dust extra</span>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <!-- CHECK-IN DIÁRIO (missão recorrente) -->
+            <section class="mt-12 mb-16 pb-8 text-center">
+                <div class="so-card-small gold">
+                    <h3 class="mission-title font-tech text-2xl md:text-3xl font-bold"
+                        style="color: var(--accent-gold);">
+                        CHECK-IN DIÁRIO</h3>
+                    <p class="mission-desc mt-3">
+                        Missão recorrente. Abra o app diariamente para garantir recompensas constantes e
+                        geração contínua de Space Dust.
+                    </p>
+                    <div class="mt-4 flex flex-wrap gap-3 justify-center">
+                        <span class="pill"><i class="fas fa-clock"></i> Abra o app a cada 24h</span>
+                        <span class="pill"><i class="fas fa-coins"></i> Receba Space Dust diário</span>
+                    </div>
+                </div>
+            </section>
+
+        </div> <!-- end list -->
+
+
+
+    </div>
+</body>
+
+</html>
