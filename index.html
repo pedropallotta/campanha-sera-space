@@ -17,14 +17,16 @@
 
     <style>
         :root {
-            --bg: #050505;
-            --card: #0E1117;
+            --bg: #030305;
+            --card: #0C0F14;
+            --card-hover: #0F1318;
             --muted: #9CA3AF;
             --accent-blue: #3B82F6;
             --accent-purple: #A855F7;
             --accent-gold: #FBBF24;
-            --glass: rgba(255, 255, 255, 0.04);
-            --border: rgba(255, 255, 255, 0.08);
+            --glass: rgba(255, 255, 255, 0.05);
+            --border: rgba(255, 255, 255, 0.06);
+            --glow-blue: rgba(59, 130, 246, 0.15);
         }
 
         /* Base */
@@ -34,11 +36,12 @@
         }
 
         body {
-            background: var(--bg);
+            background: linear-gradient(180deg, var(--bg) 0%, #080810 100%);
             color: #F3F4F6;
             font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-            padding: 36px 20px;
+            padding: 48px 24px;
             -webkit-font-smoothing: antialiased;
+            min-height: 100vh;
         }
 
         .font-tech {
@@ -70,19 +73,21 @@
 
         /* Card */
         .so-card {
-            background: linear-gradient(180deg, rgba(255, 255, 255, 0.015), rgba(0, 0, 0, 0.02)), var(--card);
-            border-radius: 18px;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.02) 0%, rgba(0, 0, 0, 0.01) 100%), var(--card);
+            border-radius: 20px;
             border: 1px solid var(--border);
-            padding: 28px;
+            padding: 32px;
             position: relative;
             overflow: hidden;
-            transition: transform .22s ease, box-shadow .22s ease, border-color .22s ease;
+            transition: all .28s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.3);
         }
 
         .so-card:hover {
-            transform: translateY(-6px);
-            box-shadow: 0 20px 60px rgba(8, 14, 30, 0.6);
-            border-color: rgba(59, 130, 246, 0.18);
+            transform: translateY(-8px);
+            box-shadow: 0 24px 64px rgba(0, 0, 0, 0.4), 0 0 40px var(--glow-blue);
+            border-color: rgba(59, 130, 246, 0.25);
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.03) 0%, rgba(0, 0, 0, 0.01) 100%), var(--card-hover);
         }
 
         /* scan overlay */
@@ -120,7 +125,8 @@
         }
 
         .so-card:hover .badge {
-            transform: scale(1.05) rotate(0.8deg)
+            transform: scale(1.08) rotate(1deg);
+            filter: drop-shadow(0 8px 16px rgba(59, 130, 246, 0.2));
         }
 
         .mission-body {
@@ -129,7 +135,11 @@
         }
 
         .mission-title {
-            font-size: 1.6rem
+            font-size: 1.6rem;
+            background: linear-gradient(90deg, #fff, #cbd5e1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
         .mission-desc {
@@ -142,20 +152,26 @@
             display: inline-flex;
             align-items: center;
             gap: 10px;
-            background: var(--glass);
-            border-radius: 10px;
-            padding: 8px 12px;
-            border: 1px solid rgba(255, 255, 255, 0.04);
-            font-size: .95rem;
-            color: #E5E7EB
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.02));
+            border-radius: 12px;
+            padding: 10px 14px;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            font-size: .9rem;
+            color: #E5E7EB;
+            transition: all .2s ease;
+        }
+
+        .pill:hover {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.04));
+            border-color: rgba(255, 255, 255, 0.1);
         }
 
         /* grid for desktop */
         @media(min-width:980px) {
             .mission-row {
-                flex-direction: row-reverse;
-                align-items: flex-start;
-                gap: 36px
+                flex-direction: row;
+                align-items: center;
+                gap: 40px
             }
 
             .badge {
@@ -202,28 +218,38 @@
 
         /* Card menor para seções especiais */
         .so-card-small {
-            background: linear-gradient(180deg, rgba(255, 255, 255, 0.015), rgba(0, 0, 0, 0.02)), var(--card);
-            border-radius: 16px;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.03) 0%, rgba(0, 0, 0, 0.02) 100%), var(--card);
+            border-radius: 20px;
             border: 1px solid var(--border);
-            padding: 24px 32px;
-            max-width: 600px;
+            padding: 32px 40px;
+            max-width: 640px;
             margin: 0 auto;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
         }
 
         .so-card-small.gold {
-            border-color: rgba(251, 191, 36, 0.25);
-            background: linear-gradient(180deg, rgba(251, 191, 36, 0.06), rgba(0, 0, 0, 0.02)), var(--card);
+            border-color: rgba(251, 191, 36, 0.3);
+            background: linear-gradient(135deg, rgba(251, 191, 36, 0.08) 0%, rgba(0, 0, 0, 0.02) 100%), var(--card);
+            box-shadow: 0 8px 32px rgba(251, 191, 36, 0.1);
         }
 
         /* CTA */
         .cta {
             display: inline-block;
-            background: linear-gradient(90deg, var(--accent-blue), #2563eb);
-            padding: 14px 26px;
-            border-radius: 12px;
+            background: linear-gradient(135deg, var(--accent-blue) 0%, #1d4ed8 100%);
+            padding: 16px 32px;
+            border-radius: 14px;
             font-weight: 700;
             text-decoration: none;
-            box-shadow: 0 12px 36px rgba(37, 99, 235, 0.18)
+            box-shadow: 0 12px 40px rgba(37, 99, 235, 0.25);
+            transition: all .25s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .cta:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 16px 48px rgba(37, 99, 235, 0.35);
         }
 
         /* header/badges spacing */
@@ -255,7 +281,7 @@
                 AJUDE O <span style="color:var(--accent-blue)">SPACE ORBIT</span><br> A IR AO ESPAÇO
             </h1>
             <p class="lead">
-                Complete as 19 insígnias. Cada ação gera Space Dust e fortalece a presença da Space Orbit na campanha
+                Complete as 19 insígnias. Cada ação gera Space Dust e fortalece a presença do Space Orbit na campanha
                 de lançamento. Quanto mais badges você conquistar, mais valioso será seu voto!
             </p>
         </header>
@@ -266,7 +292,7 @@
                 <h2 class="font-tech text-2xl md:text-3xl font-bold">COMECE SUA JORNADA</h2>
                 <p class="mission-desc mt-3">
                     Entre apenas pelo link do Space Orbit. Assim toda a Space Dust que você gerar será corretamente
-                    atribuída à Space Orbit.
+                    atribuída ao Space Orbit.
                 </p>
                 <div class="mt-6">
                     <a class="cta" href="https://t.me/sera_mission_control_bot/app?startapp=V66953M1" target="_blank"
@@ -488,6 +514,86 @@
                 </div>
             </article>
 
+            <!-- SINAL DETECTADO -->
+            <article class="so-card relative">
+                <div class="scan" aria-hidden="true"></div>
+                <div class="mission-row">
+                    <img class="badge" src="https://app.sera.space/badges/hundread_total_views.png"
+                        alt="Sinal Detectado">
+                    <div class="mission-body">
+                        <h3 class="mission-title font-tech font-bold">SINAL DETECTADO</h3>
+                        <p class="mission-desc">
+                            Primeira audiência. Valide seu alcance inicial nas redes conectadas.
+                        </p>
+                        <p class="how-to mt-4">Como fazer:</p>
+                        <div class="flex flex-wrap gap-3">
+                            <span class="pill"><i class="fas fa-eye"></i> Alcance 100 views</span>
+                            <span class="pill"><i class="fas fa-tag"></i> Use #SERASpace</span>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <!-- ECO DE FREQUÊNCIA -->
+            <article class="so-card relative">
+                <div class="scan" aria-hidden="true"></div>
+                <div class="mission-row">
+                    <img class="badge" src="https://app.sera.space/badges/three_hundread_total_views.png"
+                        alt="Eco de Frequência">
+                    <div class="mission-body">
+                        <h3 class="mission-title font-tech font-bold">ECO DE FREQUÊNCIA</h3>
+                        <p class="mission-desc">
+                            Amplifique o sinal. Aumente sua taxa de geração de Space Dust.
+                        </p>
+                        <p class="how-to mt-4">Como fazer:</p>
+                        <div class="flex flex-wrap gap-3">
+                            <span class="pill"><i class="fas fa-wave-square"></i> Alcance 300 views</span>
+                            <span class="pill"><i class="fas fa-tag"></i> Use #SERASpace</span>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <!-- INFLUÊNCIA ESTELAR -->
+            <article class="so-card relative">
+                <div class="scan" aria-hidden="true"></div>
+                <div class="mission-row">
+                    <img class="badge" src="https://app.sera.space/badges/five_hundread_total_views.png"
+                        alt="Influência Estelar">
+                    <div class="mission-body">
+                        <h3 class="mission-title font-tech font-bold">INFLUÊNCIA ESTELAR</h3>
+                        <p class="mission-desc">
+                            Alcance orbital. Posicione sua conta entre as vozes mais influentes.
+                        </p>
+                        <p class="how-to mt-4">Como fazer:</p>
+                        <div class="flex flex-wrap gap-3">
+                            <span class="pill"><i class="fas fa-atom"></i> Alcance 500 views</span>
+                            <span class="pill"><i class="fas fa-tag"></i> Use #SERASpace</span>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <!-- FAROL GALÁCTICO -->
+            <article class="so-card relative">
+                <div class="scan" aria-hidden="true"></div>
+                <div class="mission-row">
+                    <img class="badge" src="https://app.sera.space/badges/one_thousand_total_views.png"
+                        alt="Farol Galáctico">
+                    <div class="mission-body">
+                        <h3 class="mission-title font-tech font-bold">FAROL GALÁCTICO</h3>
+                        <p class="mission-desc">
+                            Viralização completa. Obtenha grandes bônus de Space Dust e recompensas extras.
+                        </p>
+                        <p class="how-to mt-4">Como fazer:</p>
+                        <div class="flex flex-wrap gap-3">
+                            <span class="pill"><i class="fas fa-lightbulb"></i> Alcance 1.000 views</span>
+                            <span class="pill"><i class="fas fa-tag"></i> Use #SERASpace</span>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
             <!-- ENCONTRE SEU COPILOTO -->
             <article class="so-card relative">
                 <div class="scan" aria-hidden="true"></div>
@@ -497,7 +603,7 @@
                     <div class="mission-body">
                         <h3 class="mission-title font-tech font-bold">ENCONTRE SEU COPILOTO</h3>
                         <p class="mission-desc">
-                            Começe a recrutar. Convide amigos via link para formar sua equipe e garantir Space Dust por
+                            Comece a recrutar. Convide amigos via link para formar sua equipe e garantir Space Dust por
                             indicação.
                         </p>
                         <p class="how-to mt-4">Como fazer:</p>
@@ -518,7 +624,7 @@
                     <div class="mission-body">
                         <h3 class="mission-title font-tech font-bold">MONTE SUA TRIPULAÇÃO</h3>
                         <p class="mission-desc">
-                            Consolide seu núcleo. Convide 5 pessoas ativas para formar uma base de apoio que gere Space
+                            Consolide seu núcleo. Convide pessoas ativas para formar uma base de apoio que gere Space
                             Dust constante.
                         </p>
                         <p class="how-to mt-4">Como fazer:</p>
@@ -578,7 +684,7 @@
                     <div class="mission-body">
                         <h3 class="mission-title font-tech font-bold">TORNE-SE GALÁCTICO</h3>
                         <p class="mission-desc">
-                            Influência massiva. Você passa a gerar grandes quantidades de Space Dust para a Space Orbit.
+                            Influência massiva. Você passa a gerar grandes quantidades de Space Dust para o Space Orbit.
                         </p>
                         <p class="how-to mt-4">Como fazer:</p>
                         <div class="flex flex-wrap gap-3">
@@ -602,86 +708,6 @@
                         <div class="flex flex-wrap gap-3">
                             <span class="pill"><i class="fas fa-meteor"></i> Convide 100 usuários para a
                                 plataforma</span>
-                        </div>
-                    </div>
-                </div>
-            </article>
-
-            <!-- SINAL DETECTADO -->
-            <article class="so-card relative">
-                <div class="scan" aria-hidden="true"></div>
-                <div class="mission-row">
-                    <img class="badge" src="https://app.sera.space/badges/hundread_total_views.png"
-                        alt="Sinal Detectado">
-                    <div class="mission-body">
-                        <h3 class="mission-title font-tech font-bold">SINAL DETECTADO</h3>
-                        <p class="mission-desc">
-                            Primeira audiência. Valide seu alcance inicial nas redes conectadas.
-                        </p>
-                        <p class="how-to mt-4">Como fazer:</p>
-                        <div class="flex flex-wrap gap-3">
-                            <span class="pill"><i class="fas fa-eye"></i> Alcance 100 views</span>
-                            <span class="pill"><i class="fas fa-tag"></i> Use #SERASpace</span>
-                        </div>
-                    </div>
-                </div>
-            </article>
-
-            <!-- ECO DE FREQUÊNCIA -->
-            <article class="so-card relative">
-                <div class="scan" aria-hidden="true"></div>
-                <div class="mission-row">
-                    <img class="badge" src="https://app.sera.space/badges/three_hundread_total_views.png"
-                        alt="Eco de Frequência">
-                    <div class="mission-body">
-                        <h3 class="mission-title font-tech font-bold">ECO DE FREQUÊNCIA</h3>
-                        <p class="mission-desc">
-                            Amplifique o sinal. Aumente sua taxa de geração de Space Dust.
-                        </p>
-                        <p class="how-to mt-4">Como fazer:</p>
-                        <div class="flex flex-wrap gap-3">
-                            <span class="pill"><i class="fas fa-wave-square"></i> Alcance 300 views</span>
-                            <span class="pill"><i class="fas fa-tag"></i> Use #SERASpace</span>
-                        </div>
-                    </div>
-                </div>
-            </article>
-
-            <!-- INFLUÊNCIA ESTELAR -->
-            <article class="so-card relative">
-                <div class="scan" aria-hidden="true"></div>
-                <div class="mission-row">
-                    <img class="badge" src="https://app.sera.space/badges/five_hundread_total_views.png"
-                        alt="Influência Estelar">
-                    <div class="mission-body">
-                        <h3 class="mission-title font-tech font-bold">INFLUÊNCIA ESTELAR</h3>
-                        <p class="mission-desc">
-                            Alcançe orbital. Posicione sua conta entre as vozes mais influentes.
-                        </p>
-                        <p class="how-to mt-4">Como fazer:</p>
-                        <div class="flex flex-wrap gap-3">
-                            <span class="pill"><i class="fas fa-atom"></i> Alcance 500 views</span>
-                            <span class="pill"><i class="fas fa-tag"></i> Use #SERASpace</span>
-                        </div>
-                    </div>
-                </div>
-            </article>
-
-            <!-- FAROL GALÁCTICO -->
-            <article class="so-card relative">
-                <div class="scan" aria-hidden="true"></div>
-                <div class="mission-row">
-                    <img class="badge" src="https://app.sera.space/badges/one_thousand_total_views.png"
-                        alt="Farol Galáctico">
-                    <div class="mission-body">
-                        <h3 class="mission-title font-tech font-bold">FAROL GALÁCTICO</h3>
-                        <p class="mission-desc">
-                            Viralização completa. Obtenha grandes bônus de Space Dust e recompensas extras.
-                        </p>
-                        <p class="how-to mt-4">Como fazer:</p>
-                        <div class="flex flex-wrap gap-3">
-                            <span class="pill"><i class="fas fa-lightbulb"></i> Alcance 1.000 views</span>
-                            <span class="pill"><i class="fas fa-tag"></i> Use #SERASpace</span>
                         </div>
                     </div>
                 </div>
